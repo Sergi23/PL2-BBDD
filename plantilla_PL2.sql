@@ -84,13 +84,12 @@ CREATE TABLE IF NO EXISTS intermedio.Desea (
 )
 
 -- Comandos \COPY para cargar datos desde CSVs en el esquema temporal
-\COPY intermedio.Usuario FROM 'PL2-BBDD/DATOS DISCOS/usuarios.csv' DELIMITER ';' CSV HEADER;
-\COPY intermedio.Disco FROM 'PL2-BBDD/DATOS DISCOS/discos.csv' DELIMITER ';' CSV HEADER;
-\COPY intermedio.Ediciones FROM 'PL2-BBDD/DATOS DISCOS/ediciones.csv' DELIMITER ';' CSV HEADER;
-\COPY intermedio.Canciones FROM 'PL2-BBDD/DATOS DISCOS/canciones.csv' DELIMITER ';' CSV HEADER;
-\COPY intermedio.Tiene FROM 'PL2-BBDD/DATOS DISCOS/usuario_tiene_edicion.csv' DELIMITER ';' CSV HEADER;
-\COPY intermedio.Desea FROM 'PL2-BBDD/DATOS DISCOS/usuario_desea_disco.csv' DELIMITER ';' CSV HEADER;
-
+\COPY intermedio.Usuario FROM ./PL2-BBDD/DATOS DISCO/usuario.csv WITH (FORMAT csv, HEADER, DELIMITER ';', NULL 'NULL', ENCODING 'UTF-8');
+\COPY intermedio.Disco FROM ./PL2-BBDD/DATOS DISCO/discos.csv WITH (FORMAT csv, HEADER, DELIMITER ';', NULL 'NULL', ENCODING 'UTF-8');
+\COPY intermedio.Ediciones FROM ./PL2-BBDD/DATOS DISCO/ediciones.csv WITH (FORMAT csv, HEADER, DELIMITER ';', NULL 'NULL', ENCODING 'UTF-8');
+\COPY intermedio.Canciones FROM ./PL2-BBDD/DATOS DISCO/canciones.csv WITH (FORMAT csv, HEADER, DELIMITER ';', NULL 'NULL', ENCODING 'UTF-8');
+\COPY intermedio.Tiene FROM ./PL2-BBDD/DATOS DISCO/usuario_tiene_edicion.csv WITH (FORMAT csv, HEADER, DELIMITER ';', NULL 'NULL', ENCODING 'UTF-8');
+\COPY intermedio.Desea FROM ./PL2-BBDD/DATOS DISCO/usuario_desea_disco.csv WITH (FORMAT csv, HEADER, DELIMITER ';', NULL 'NULL', ENCODING 'UTF-8');
 
 
 
