@@ -1,4 +1,4 @@
-\pset pager off
+set pager off
 
 SET client_encoding = 'UTF8';
 
@@ -9,79 +9,80 @@ BEGIN;
 \echo 'creando un esquema temporal'
 
 
-SET search_path='nombre del esquema o esquemas utilizados';
+SET search_path = 'nombre del esquema o esquemas utilizados';
 
 \echo 'Cargando datos'
 
 
 
 -- Esquema temporal: Tablas con todos los campos como TEXT y sin restricciones
-CREATE ESCHEMA IF NOT EXISTS intermedio;
+CREATE SCHEMA IF NOT EXISTS intermedio;
 
-CREATE TABLE IF NO EXISTS intermedio.Usuario (
+CREATE TABLE IF NOT EXISTS intermedio.Usuario (
 
     contraseña TEXT,
     email TEXT UNIQUE,
     nombre TEXT,
-    nombre_usuario TEXT UNIQUE,
-)
+    nombre_usuario TEXT UNIQUE
+);
 
-CREATE TABLE IF NO EXISTS intermedio.Grupo (
+CREATE TABLE IF NOT EXISTS intermedio.Grupo (
 
     nombre_grupo TEXT UNIQUE,
-    URL_web TEXT,
-)
+    URL_web TEXT
+);
 
-CREATE TABLE IF NO EXISTS intermedio.Disco (
+CREATE TABLE IF NOT EXISTS intermedio.Disco (
 
     titulo TEXT,
     año_publicacion TEXT,
     URL_portada TEXT,
-    nombre_grupo TEXT,
-)
+    nombre_grupo TEXT
+);
 
-CREATE TABLE IF NO EXISTS intermedio.Genero (
+CREATE TABLE IF NOT EXISTS intermedio.Genero (
 
     año_publicacion TEXT,
     titulo TEXT,
-    genero TEXT,
-)
+    genero TEXT
+);
 
-CREATE TABLE IF NO EXISTS intermedio.Canciones (
+CREATE TABLE IF NOT EXISTS intermedio.Canciones (
 
     titulo TEXT,
     duracion TEXT,
     titulo_disco TEXT,
-    año_publicacion_disco TEXT,
+    año_publicacion_disco TEXT
 
-)
+);
 
-CREATE TABLE IF NO EXISTS intermedio.Ediciones (
+CREATE TABLE IF NOT EXISTS intermedio.Ediciones (
 
     formato TEXT,
     año_edicion TEXT,
     pais TEXT,
     titulo TEXT,
     año_publicacion TEXT,
-    estado TEXT,
+    estado TEXT
 
-)
+);
 
-CREATE TABLE IF NO EXISTS intermedio.Tiene(
-
-    nombre_usuario TEXT,
-    titulo_disco TEXT,
-    año_publicacion_disco TEXT,
-    estado TEXT,
-)
-
-CREATE TABLE IF NO EXISTS intermedio.Desea (
+CREATE TABLE IF NOT EXISTS intermedio.Tiene(
 
     nombre_usuario TEXT,
     titulo_disco TEXT,
     año_publicacion_disco TEXT,
+    estado TEXT
+
+);
+
+CREATE TABLE IF NOT EXISTS intermedio.Desea (
+
+    nombre_usuario TEXT,
+    titulo_disco TEXT,
+    año_publicacion_disco TEXT
     
-)
+);
 
 -- Comandos \COPY para cargar datos desde CSVs en el esquema temporal
 \COPY intermedio.Usuario FROM ./PL2-BBDD/DATOS DISCO/usuario.csv WITH (FORMAT csv, HEADER, DELIMITER ';', NULL 'NULL', ENCODING 'UTF-8');
@@ -95,45 +96,45 @@ CREATE TABLE IF NO EXISTS intermedio.Desea (
 
 -- Esquema final: Aquí se definen las tablas con claves primarias y foráneas
 
-CREATE TABLE IF NO EXISTS Usuario (
+CREATE TABLE IF NOT EXISTS Usuario (
 
     contraseña VARCHAR(20) NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE,
     nombre VARCHAR(20) NOT NULL,
     nombre_usuario VARCHAR(15) NOT NULL PRIMARY KEY,
-)
+);
 
-CREATE TABLE IF NO EXISTS Grupo (
+CREATE TABLE IF NOT EXISTS Grupo (
 
     nombre_grupo VARCHAR(20) NOT NULL PRIMARY KEY,
     URL_web VARCHAR(50) NOT NULL,
-)
+);
 
-CREATE TABLE IF NO EXISTS Disco (
+CREATE TABLE IF NOT EXISTS Disco (
 
     titulo VARCHAR(20) NOT NULL PRIMARY KEY,
     año_publicacion DATE NOT NULL PRIMARY KEY, 
     URL_portada VARCHAR(50) NOT NULL,
     FOREIGN KEY (nombre_grupo) REFERENCES Grupo(nombre_grupo),
-)
+);
 
-CREATE TABLE IF NO EXISTS Genero (
+CREATE TABLE IF NOT EXISTS Genero (
 
     FOREIGN KEY (año_publicacion) REFERENCES Disco(año_publicacion),
     FOREIGN KEY (titulo) REFERENCES Disco(titulo),
     genero VARCHAR(20) NOT NULL,
-)
+);
 
-CREATE TABLE IF NO EXISTS Canciones (
+CREATE TABLE IF NOT EXISTS Canciones (
 
     titulo VARCHAR(20) NOT NULL PRIMARY KEY,
     duracion TIME NOT NULL,
     FOREIGN KEY (titulo) REFERENCES Disco(titulo),
     FOREIGN KEY ( año_publicacion) REFERENCES Disco( año_publicacion),
 
-)
+);
 
-CREATE TABLE IF NO EXISTS Ediciones (
+CREATE TABLE IF NOT EXISTS Ediciones (
 
     formato VARCHAR(20) NOT NULL PRIMARY KEY,
     año_edicion DATE NOT NULL,
@@ -142,24 +143,26 @@ CREATE TABLE IF NO EXISTS Ediciones (
     PRIMARY KEY ( año_publicacion) REFERENCES Disco( año_publicacion),
     FOREIGN KEY (estado) REFERENCES Tiene(estado),
 
-)
+);
 
-CREATE TABLE IF NO EXISTS Tiene(
+CREATE TABLE IF NOT EXISTS Tiene(
 
     PRIMARY KEY (nombre_usuario,titulo_disco,año_publicacion_disco)
     FOREIGN KEY (nombre_usuario) REFERENCES usuario(nombre_usuario),
     FOREIGN KEY (titulo) REFERENCES Disco(titulo),
     FOREIGN KEY (año_publicacion) REFERENCES Disco(año_publicacion),
     estado VARCHAR(20) NOT NULL,
-)
 
-CREATE TABLE IF NO EXISTS Desea (
+);
+
+CREATE TABLE IF NOT EXISTS Desea (
 
     PRIMARY KEY (nombre_usuario,titulo_disco,año_publicacion_disco)
     FOREIGN KEY (nombre_usuario) REFERENCES usuario(nombre_usuario),
     FOREIGN KEY (titulo) REFERENCES Disco(titulo),
     FOREIGN KEY (año_publicacion) REFERENCES Disco(año_publicacion),
-)
+
+);
 
 
 -- Cambiar al esquema final
@@ -211,11 +214,11 @@ FROM intermedio.Desea;
 
 
 
-\echo insertando datos en el esquema final
+\echo 'insertando datos en el esquema final'
 
-\echo Consulta 1: texto de la consulta
+\echo 'Consulta 1: texto de la consulta'
 
-\echo Consulta n:
+\echo ' Consulta n:'
 
 
 ROLLBACK;                       -- importante! permite correr el script multiples veces...p
