@@ -99,7 +99,7 @@ CREATE TABLE IF NO EXISTS intermedio.Desea (
 CREATE TABLE IF NO EXISTS Usuario (
 
     contraseña VARCHAR(20) NOT NULL,
-    email VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL UNIQUE,
     nombre VARCHAR(20) NOT NULL,
     nombre_usuario VARCHAR(15) NOT NULL PRIMARY KEY,
 )
@@ -115,13 +115,13 @@ CREATE TABLE IF NO EXISTS Disco (
     titulo VARCHAR(20) NOT NULL PRIMARY KEY,
     año_publicacion DATE NOT NULL PRIMARY KEY, 
     URL_portada VARCHAR(50) NOT NULL,
-    FOREING KEY (nombre_grupo) REFERENCES Grupo(nombre_grupo),
+    FOREIGN KEY (nombre_grupo) REFERENCES Grupo(nombre_grupo),
 )
 
 CREATE TABLE IF NO EXISTS Genero (
 
-    FOREING KEY ( año_publicacion) REFERENCES Disco( año_publicacion),
-    FOREING KEY (titulo) REFERENCES Disco(titulo),
+    FOREIGN KEY (año_publicacion) REFERENCES Disco(año_publicacion),
+    FOREIGN KEY (titulo) REFERENCES Disco(titulo),
     genero VARCHAR(20) NOT NULL,
 )
 
@@ -129,35 +129,37 @@ CREATE TABLE IF NO EXISTS Canciones (
 
     titulo VARCHAR(20) NOT NULL PRIMARY KEY,
     duracion TIME NOT NULL,
-    FOREING KEY (titulo) REFERENCES Disco(titulo),
-    FOREING KEY ( año_publicacion) REFERENCES Disco( año_publicacion),
+    FOREIGN KEY (titulo) REFERENCES Disco(titulo),
+    FOREIGN KEY ( año_publicacion) REFERENCES Disco( año_publicacion),
 
 )
 
 CREATE TABLE IF NO EXISTS Ediciones (
 
-    formato VARCHAR(20) NOT NULL, PRIMARY KEY,
+    formato VARCHAR(20) NOT NULL PRIMARY KEY,
     año_edicion DATE NOT NULL,
     pais VARCHAR(20) NOT NULL,
     PRIMARY KEY (titulo) REFERENCES Disco(titulo),
     PRIMARY KEY ( año_publicacion) REFERENCES Disco( año_publicacion),
-    FOREING KEY (estado) REFERENCES Tiene(estado),
+    FOREIGN KEY (estado) REFERENCES Tiene(estado),
 
 )
 
 CREATE TABLE IF NO EXISTS Tiene(
 
-    PRIMARY FOREING KEY (nombre_usuario) REFERENCES usuario(nombre_usuario),
-    PRIMARY FOREING KEY (titulo) REFERENCES Disco(titulo),
-    PRIMARY FOREING KEY ( año_publicacion) REFERENCES Disco( año_publicacion),
+    PRIMARY KEY (nombre_usuario,titulo_disco,año_publicacion_disco)
+    FOREIGN KEY (nombre_usuario) REFERENCES usuario(nombre_usuario),
+    FOREIGN KEY (titulo) REFERENCES Disco(titulo),
+    FOREIGN KEY (año_publicacion) REFERENCES Disco(año_publicacion),
     estado VARCHAR(20) NOT NULL,
 )
 
 CREATE TABLE IF NO EXISTS Desea (
 
-    PRIMARY FOREING KEY (nombre_usuario) REFERENCES usuario(nombre_usuario),
-    PRIMARY FOREING KEY (titulo) REFERENCES Disco(titulo),
-    PRIMARY FOREING KEY ( año_publicacion) REFERENCES Disco( año_publicacion),
+    PRIMARY KEY (nombre_usuario,titulo_disco,año_publicacion_disco)
+    FOREIGN KEY (nombre_usuario) REFERENCES usuario(nombre_usuario),
+    FOREIGN KEY (titulo) REFERENCES Disco(titulo),
+    FOREIGN KEY (año_publicacion) REFERENCES Disco(año_publicacion),
 )
 
 
