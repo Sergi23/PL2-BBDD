@@ -13,6 +13,14 @@ SET search_path='nombre del esquema o esquemas utilizados';
 
 \echo 'Cargando datos'
 
+\COPY intermedio.Usuario FROM 'PL2-BBDD/DATOS DISCOS/usuarios.csv' DELIMITER ';' CSV HEADER;
+\COPY intermedio.Disco FROM 'PL2-BBDD/DATOS DISCOS/discos.csv' DELIMITER ';' CSV HEADER;
+\COPY intermedio.Ediciones FROM 'PL2-BBDD/DATOS DISCOS/ediciones.csv' DELIMITER ';' CSV HEADER;
+\COPY intermedio.Canciones FROM 'PL2-BBDD/DATOS DISCOS/canciones.csv' DELIMITER ';' CSV HEADER;
+\COPY intermedio.Tiene FROM 'PL2-BBDD/DATOS DISCOS/usuario_tiene_edicion.csv' DELIMITER ';' CSV HEADER;
+\COPY intermedio.Desea FROM 'PL2-BBDD/DATOS DISCOS/usuario_desea_disco.csv' DELIMITER ';' CSV HEADER;
+
+
 CREATE ESCHEMA IF NOT EXISTS intermedio;
 
 CREATE TABLE IF NO EXISTS intermedio.Usuario (
