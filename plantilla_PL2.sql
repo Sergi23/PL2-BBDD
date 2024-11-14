@@ -21,14 +21,14 @@ CREATE ESCHEMA IF NOT EXISTS intermedio;
 CREATE TABLE IF NO EXISTS intermedio.Usuario (
 
     contraseña TEXT,
-    email TEXT,
+    email TEXT UNIQUE,
     nombre TEXT,
-    nombre_usuario TEXT,
+    nombre_usuario TEXT UNIQUE,
 )
 
 CREATE TABLE IF NO EXISTS intermedio.Grupo (
 
-    nombre_grupo TEXT,
+    nombre_grupo TEXT UNIQUE,
     URL_web TEXT,
 )
 
@@ -203,6 +203,9 @@ FROM intermedio.Tiene;
 INSERT INTO Desea (nombre_usuario, titulo, año_publicacion)
 SELECT nombre_usuario, titulo, CAST(año_publicacion AS DATE)
 FROM intermedio.Desea;
+
+
+
 
 
 
