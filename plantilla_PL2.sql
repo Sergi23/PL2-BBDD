@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS Ediciones (
     pais_edicion VARCHAR(20) NOT NULL,
     formato VARCHAR(20) NOT NULL,
     PRIMARY KEY (id_disco, año_edicion),
-    FOREIGN KEY (id_disco) REFERENCES Disco(id_disco),
+    FOREIGN KEY (id_disco) REFERENCES Disco(id_disco)
 
 );
 
