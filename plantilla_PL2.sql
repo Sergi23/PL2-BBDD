@@ -1,27 +1,22 @@
-set pager off
 
 SET client_encoding = 'UTF8';
 
 BEGIN;
-\echo 'creando el esquema para la BBDD de películas'
 
-
-\echo 'creando un esquema temporal'
-
-
-SET search_path = 'nombre del esquema o esquemas utilizados';
+CREATE SCHEMA IF NOT EXISTS intermedio;
+--SET search_path = intermedio ;
 
 \echo 'Cargando datos'
 
 
 
 -- Esquema temporal: Tablas con todos los campos como TEXT y sin restricciones
-CREATE SCHEMA  IF NOT EXISTS intermedio;
+
 
 CREATE TABLE IF NOT EXISTS intermedio.Usuario (
     nombre TEXT,
-    nombre_usuario TEXT UNIQUE,
-    email TEXT UNIQUE,
+    nombre_usuario TEXT ,
+    email TEXT ,
     contraseña TEXT  
     
 );
@@ -36,11 +31,12 @@ CREATE TABLE IF NOT EXISTS intermedio.Disco (
     nombre_grupo TEXT,
     URL_grupo   TEXT,
     Generos TEXT,
-    URL_portada TEXT,
+    URL_portada TEXT
    
 );
 
 CREATE TABLE IF NOT EXISTS intermedio.Canciones (
+
     id_disco TEXT,
     titulo TEXT,
     duracion TEXT
@@ -52,7 +48,7 @@ CREATE TABLE IF NOT EXISTS intermedio.Ediciones (
     id_disco TEXT,
     año_edicion TEXT,
     pais TEXT,
-    formato TEXT,
+    formato TEXT
 
 );
 
@@ -77,12 +73,12 @@ CREATE TABLE IF NOT EXISTS intermedio.Desea (
 );
 
 -- Comandos \COPY para cargar datos desde CSVs en el esquema temporal
-\COPY intermedio.Usuario FROM ./DATOS_DISCOS/usuario.csv WITH (FORMAT csv, HEADER, DELIMITER ';', NULL 'NULL', ENCODING 'UTF-8');
-\COPY intermedio.Disco FROM ./DATOS_DISCOS/discos.csv WITH (FORMAT csv, HEADER, DELIMITER ';', NULL 'NULL', ENCODING 'UTF-8');
-\COPY intermedio.Ediciones FROM ./DATOS_DISCOS/ediciones.csv WITH (FORMAT csv, HEADER, DELIMITER ';', NULL 'NULL', ENCODING 'UTF-8');
-\COPY intermedio.Canciones FROM ./DATOS_DISCOS/canciones.csv WITH (FORMAT csv, HEADER, DELIMITER ';', NULL 'NULL', ENCODING 'UTF-8');
-\COPY intermedio.Tiene FROM ./DATOS_DISCOS/usuario_tiene_edicion.csv WITH (FORMAT csv, HEADER, DELIMITER ';', NULL 'NULL', ENCODING 'UTF-8');
-\COPY intermedio.Desea FROM ./DATOS_DISCOS/usuario_desea_disco.csv WITH (FORMAT csv, HEADER, DELIMITER ';', NULL 'NULL', ENCODING 'UTF-8');
+\COPY intermedio.Usuario FROM ./DATOS_DISCOS/usuarios.csv WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'UTF-8');
+\COPY intermedio.Disco FROM ./DATOS_DISCOS/discos.csv WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'UTF-8');
+\COPY intermedio.Ediciones FROM ./DATOS_DISCOS/ediciones.csv WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'UTF-8');
+\COPY intermedio.Canciones FROM ./DATOS_DISCOS/canciones.csv WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'UTF-8');
+\COPY intermedio.Tiene FROM ./DATOS_DISCOS/usuario_tiene_edicion.csv WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'UTF-8');
+\COPY intermedio.Desea FROM ./DATOS_DISCOS/usuario_desea_disco.csv WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'UTF-8');
 
 
 
@@ -91,7 +87,7 @@ CREATE TABLE IF NOT EXISTS intermedio.Desea (
 CREATE TABLE IF NOT EXISTS Usuario (
 
     contraseña VARCHAR(20) NOT NULL,
-    email VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(50) NOT NULL ,
     nombre VARCHAR(20) NOT NULL,
     nombre_usuario VARCHAR(15) NOT NULL PRIMARY KEY,
 );
