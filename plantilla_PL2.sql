@@ -6,8 +6,7 @@ BEGIN;
 CREATE SCHEMA IF NOT EXISTS intermedio;
 --SET search_path = intermedio ;
 
-\echo 'Cargando datos'
-
+\echo 'Cargando datos';
 
 
 -- Esquema temporal: Tablas con todos los campos como TEXT y sin restricciones
@@ -24,14 +23,15 @@ CREATE TABLE IF NOT EXISTS intermedio.Usuario (
 
 
 CREATE TABLE IF NOT EXISTS intermedio.Disco (
+
     id_disco TEXT,
     nombre_disco TEXT,
     año_publicacion TEXT,
     id_grupo TEXT,
     nombre_grupo TEXT,
     URL_grupo   TEXT,
-    Generos TEXT,
-    URL_portada TEXT
+    generos TEXT,
+    url_portada TEXT
    
 );
 
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS intermedio.Tiene(
     titulo_disco TEXT,
     año_publicacion_disco TEXT,
     año_edicion TEXT,
-    pais_edicion    TEXT,
+    pais_edicion TEXT,
     formato TEXT,
     estado TEXT
 
@@ -73,12 +73,12 @@ CREATE TABLE IF NOT EXISTS intermedio.Desea (
 );
 
 -- Comandos \COPY para cargar datos desde CSVs en el esquema temporal
-\COPY intermedio.Usuario FROM ./DATOS_DISCOS/usuarios.csv WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'UTF-8');
-\COPY intermedio.Disco FROM ./DATOS_DISCOS/discos.csv WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'UTF-8');
-\COPY intermedio.Ediciones FROM ./DATOS_DISCOS/ediciones.csv WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'UTF-8');
-\COPY intermedio.Canciones FROM ./DATOS_DISCOS/canciones.csv WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'UTF-8');
-\COPY intermedio.Tiene FROM ./DATOS_DISCOS/usuario_tiene_edicion.csv WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'UTF-8');
-\COPY intermedio.Desea FROM ./DATOS_DISCOS/usuario_desea_disco.csv WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'UTF-8');
+\COPY intermedio.Usuario FROM 'DATOS_DISCOS/usuarios.csv' WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'WIN1252');
+\COPY intermedio.Disco FROM 'DATOS_DISCOS/discos.csv' WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'WIN1252');
+\COPY intermedio.Ediciones FROM 'DATOS_DISCOS/ediciones.csv' WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'WIN1252');
+\COPY intermedio.Canciones FROM 'DATOS_DISCOS/canciones.csv' WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'WIN1252');
+\COPY intermedio.Tiene FROM 'DATOS_DISCOS/usuario_tiene_edicion.csv' WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'WIN1252');
+\COPY intermedio.Desea FROM 'DATOS_DISCOS/usuario_desea_disco.csv' WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'WIN1252');
 
 
 
@@ -92,67 +92,70 @@ CREATE TABLE IF NOT EXISTS Usuario (
     nombre_usuario VARCHAR(15) NOT NULL PRIMARY KEY,
 );
 
-CREATE TABLE IF NOT EXISTS Grupo (
-
-    nombre_grupo VARCHAR(20) NOT NULL PRIMARY KEY,
-    URL_web VARCHAR(50) NOT NULL,
-);
 
 CREATE TABLE IF NOT EXISTS Disco (
 
-    titulo VARCHAR(20) NOT NULL PRIMARY KEY,
-    año_publicacion DATE NOT NULL PRIMARY KEY, 
-    URL_portada VARCHAR(50) NOT NULL,
-    FOREIGN KEY (nombre_grupo) REFERENCES Grupo(nombre_grupo),
+    id_disco VARCHAR(20) NOT NULL PRIMARY KEY,
+    titulo_disco VARCHAR(20) NOT NULL,
+    año_publicacion DATE NOT NULL,
+    id_grupo VARCHAR(20) NOT NULL,
+    nombre_grupo VARCHAR(20) NOT NULL,
+    url_grupo VARCHAR(50) NOT NULL,
+    generos VARCHAR(50) NOT NULL,   
+    url_portada VARCHAR(50) NOT NULL,
 );
 
-CREATE TABLE IF NOT EXISTS Genero (
-
-    FOREIGN KEY (año_publicacion) REFERENCES Disco(año_publicacion),
-    FOREIGN KEY (titulo) REFERENCES Disco(titulo),
-    genero VARCHAR(20) NOT NULL,
-);
 
 CREATE TABLE IF NOT EXISTS Canciones (
 
-    titulo VARCHAR(20) NOT NULL PRIMARY KEY,
+    titulo_cancion VARCHAR(20) NOT NULL,
     duracion TIME NOT NULL,
-    FOREIGN KEY (titulo) REFERENCES Disco(titulo),
-    FOREIGN KEY ( año_publicacion) REFERENCES Disco( año_publicacion),
+    id_disco VARCHAR(20) NOT NULL,
+    PRIMARY KEY (id_disco, titulo_cancion),
+    FOREIGN KEY (id_disco) REFERENCES Disco(id_disco)
 
 );
 
 CREATE TABLE IF NOT EXISTS Ediciones (
-
-    formato VARCHAR(20) NOT NULL PRIMARY KEY,
+    
+    id_disco VARCHAR(20) NOT NULL,
     año_edicion DATE NOT NULL,
-    pais VARCHAR(20) NOT NULL,
-    PRIMARY KEY (titulo) REFERENCES Disco(titulo),
-    PRIMARY KEY ( año_publicacion) REFERENCES Disco( año_publicacion),
-    FOREIGN KEY (estado) REFERENCES Tiene(estado),
+    pais_edicion VARCHAR(20) NOT NULL,
+    formato VARCHAR(20) NOT NULL,
+    PRIMARY KEY (id_disco, año_edicion),
+    FOREIGN KEY (id_disco) REFERENCES Disco(id_disco),
 
 );
 
 CREATE TABLE IF NOT EXISTS Tiene(
 
-    PRIMARY KEY (nombre_usuario,titulo_disco,año_publicacion_disco)
-    FOREIGN KEY (nombre_usuario) REFERENCES usuario(nombre_usuario),
-    FOREIGN KEY (titulo) REFERENCES Disco(titulo),
-    FOREIGN KEY (año_publicacion) REFERENCES Disco(año_publicacion),
-    estado VARCHAR(20) NOT NULL,
+    nombre_usuario VARCHAR(50) NOT NULL,
+    titulo_disco VARCHAR(100) NOT NULL,
+    año_publicacion_disco DATE NOT NULL,
+    año_edicion DATE NOT NULL,
+    pais_edicion VARCHAR(50) NOT NULL,
+    formato VARCHAR(50) NOT NULL,
+    estado VARCHAR(50) NOT NULL,
+    PRIMARY KEY (nombre_usuario, titulo_disco, año_publicacion_disco),
+    FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario),
+    FOREIGN KEY (titulo_disco) REFERENCES Disco(nombre_disco),
+    FOREIGN KEY (año_publicacion_disco) REFERENCES Disco(año_publicacion)
 
 );
 
 CREATE TABLE IF NOT EXISTS Desea (
 
-    PRIMARY KEY (nombre_usuario,titulo_disco,año_publicacion_disco)
-    FOREIGN KEY (nombre_usuario) REFERENCES usuario(nombre_usuario),
-    FOREIGN KEY (titulo) REFERENCES Disco(titulo),
-    FOREIGN KEY (año_publicacion) REFERENCES Disco(año_publicacion),
+    nombre_usuario VARCHAR(50) NOT NULL,
+    titulo_disco VARCHAR(100) NOT NULL,
+    año_publicaion_disco DATE NOT NULL,
+    PRIMARY KEY (nombre_usuario,titulo_disco,año_publicacion_disco),
+    FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario),
+    FOREIGN KEY (titulo_disco, año_publicaion_disco) REFERENCES Disco(nombre_disco, año_publicacion)
 
 );
 
 
+-- Cambiar al esquema final
 -- Cambiar al esquema final
 SET search_path TO esquema_final;
 
@@ -161,39 +164,30 @@ INSERT INTO Usuario (nombre_usuario, contraseña, email, nombre)
 SELECT nombre_usuario, contraseña, email, nombre
 FROM intermedio.Usuario;
 
--- 2. Insertar en Grupo (sin dependencias)
-INSERT INTO Grupo (nombre_grupo, URL_web)
-SELECT nombre_grupo, URL_web
-FROM intermedio.Grupo;
+-- 2. Insertar en Disco (depende de Grupo)
+INSERT INTO Disco (titulo_disco, año_publicacion, url_portada, nombre_grupo)
+SELECT nombre_disco, CAST(año_publicacion AS DATE), url_portada, nombre_grupo
+FROM intermedio.Disco;
 
--- 3. Insertar en Disco (depende de Grupo)
-INSERT INTO Disco (titulo, año_publicacion, URL_portada, nombre_grupo)
-SELECT titulo, CAST(año_publicacion AS DATE), URL_portada, nombre_grupo
-FROM Insertar.Disco;
 
--- 4. Insertar en Genero (depende de Disco)
-INSERT INTO Genero (titulo, año_publicacion, genero)
-SELECT titulo, CAST(año_publicacion AS DATE), genero
-FROM intermedio.Genero;
+-- 3. Insertar en Canciones (depende de Disco)
+INSERT INTO Canciones (titulo_cancion, duracion, id_disco)
+SELECT titulo, CAST(duracion AS TIME), id_disco
+FROM intermedio.Canciones;
 
--- 5. Insertar en Canciones (depende de Disco)
-INSERT INTO Canciones (titulo_cancion, duracion, titulo_disco, año_publicacion)
-SELECT titulo_cancion, CAST(duracion AS TIME), titulo_disco, CAST(año_publicacion AS DATE)
-FROM intermeq.Canciones;
-
--- 6. Insertar en Ediciones (depende de Disco)
-INSERT INTO Ediciones (formato, año_edicion, pais, titulo, año_publicacion)
-SELECT formato, CAST(año_edicion AS DATE), pais, titulo, CAST(año_publicacion AS DATE)
+-- 4. Insertar en Ediciones (depende de Disco)
+INSERT INTO Ediciones (id_disco, año_edicion, pais_edicion, formato)
+SELECT id_disco, CAST(año_edicion AS DATE), pais, formato
 FROM intermedio.Ediciones;
 
--- 7. Insertar en Tiene (depende de Usuario y Disco)
-INSERT INTO Tiene (nombre_usuario, titulo, año_publicacion, estado)
-SELECT nombre_usuario, titulo, CAST(año_publicacion AS DATE), estado
+-- 5. Insertar en Tiene (depende de Usuario y Disco)
+INSERT INTO Tiene (nombre_usuario, titulo_disco, año_publicacion_disco, año_edicion, pais_edicion, formato, estado)
+SELECT nombre_usuario, titulo_disco, CAST(año_publicacion_disco AS DATE), CAST(año_edicion AS DATE), pais_edicion, formato, estado
 FROM intermedio.Tiene;
 
--- 8. Insertar en Desea (depende de Usuario y Disco)
-INSERT INTO Desea (nombre_usuario, titulo, año_publicacion)
-SELECT nombre_usuario, titulo, CAST(año_publicacion AS DATE)
+-- 6. Insertar en Desea (depende de Usuario y Disco)
+INSERT INTO Desea (nombre_usuario, titulo_disco, año_publicacion_disco)
+SELECT nombre_usuario, titulo_disco, CAST(año_publicacion_disco AS DATE)
 FROM intermedio.Desea;
 
 
