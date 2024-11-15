@@ -1,5 +1,5 @@
 
-SET client_encoding = 'UTF8';
+SET client_encoding = 'UTF-8';
 
 BEGIN;
 
@@ -13,6 +13,7 @@ CREATE SCHEMA IF NOT EXISTS intermedio;
 
 
 CREATE TABLE IF NOT EXISTS intermedio.Usuario (
+
     nombre TEXT,
     nombre_usuario TEXT ,
     email TEXT ,
@@ -73,12 +74,12 @@ CREATE TABLE IF NOT EXISTS intermedio.Desea (
 );
 
 -- Comandos \COPY para cargar datos desde CSVs en el esquema temporal
-\COPY intermedio.Usuario FROM 'DATOS_DISCOS/usuarios.csv' WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'WIN1252');
-\COPY intermedio.Disco FROM 'DATOS_DISCOS/discos.csv' WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'WIN1252');
-\COPY intermedio.Ediciones FROM 'DATOS_DISCOS/ediciones.csv' WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'WIN1252');
-\COPY intermedio.Canciones FROM 'DATOS_DISCOS/canciones.csv' WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'WIN1252');
-\COPY intermedio.Tiene FROM 'DATOS_DISCOS/usuario_tiene_edicion.csv' WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'WIN1252');
-\COPY intermedio.Desea FROM 'DATOS_DISCOS/usuario_desea_disco.csv' WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'WIN1252');
+\COPY intermedio.Usuario FROM ./DATOS_DISCOS/usuarios.csv WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'UTF-8');
+\COPY intermedio.Disco FROM ./DATOS_DISCOS/discos.csv WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'UTF-8');
+\COPY intermedio.Ediciones FROM ./DATOS_DISCOS/ediciones.csv WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'UTF-8');
+\COPY intermedio.Canciones FROM ./DATOS_DISCOS/canciones.csv WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'UTF-8');
+\COPY intermedio.Tiene FROM ./DATOS_DISCOS/usuario_tiene_edicion.csv WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'UTF-8');
+\COPY intermedio.Desea FROM ./DATOS_DISCOS/usuario_desea_disco.csv WITH (FORMAT csv, HEADER, DELIMITER E';', NULL 'NULL', ENCODING 'UTF-8');
 
 
 
@@ -189,9 +190,6 @@ FROM intermedio.Tiene;
 INSERT INTO Desea (nombre_usuario, titulo_disco, año_publicacion_disco)
 SELECT nombre_usuario, titulo_disco, CAST(año_publicacion_disco AS DATE)
 FROM intermedio.Desea;
-
-
-
 
 
 
