@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS Usuario (
     contraseña VARCHAR(20) NOT NULL,
     email VARCHAR(50) NOT NULL ,
     nombre VARCHAR(20) NOT NULL,
-    nombre_usuario VARCHAR(15) NOT NULL PRIMARY KEY,
+    nombre_usuario VARCHAR(15) NOT NULL PRIMARY KEY
 );
 
 
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS Disco (
     nombre_grupo VARCHAR(20) NOT NULL,
     url_grupo VARCHAR(50) NOT NULL,
     generos VARCHAR(50) NOT NULL,   
-    url_portada VARCHAR(50) NOT NULL,
+    url_portada VARCHAR(50) NOT NULL
 );
 
 
@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS Tiene(
     estado VARCHAR(50) NOT NULL,
     PRIMARY KEY (nombre_usuario, titulo_disco, año_publicacion_disco),
     FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario),
-    FOREIGN KEY (titulo_disco) REFERENCES Disco(nombre_disco),
+    FOREIGN KEY (titulo_disco) REFERENCES Disco(titulo_disco),
     FOREIGN KEY (año_publicacion_disco) REFERENCES Disco(año_publicacion)
 
 );
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS Desea (
 
     nombre_usuario VARCHAR(50) NOT NULL,
     titulo_disco VARCHAR(100) NOT NULL,
-    año_publicaion_disco DATE NOT NULL,
+    año_publicacion_disco DATE NOT NULL,
     PRIMARY KEY (nombre_usuario,titulo_disco,año_publicacion_disco),
     FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario),
     FOREIGN KEY (titulo_disco, año_publicaion_disco) REFERENCES Disco(nombre_disco, año_publicacion)
@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS Desea (
 
 -- Cambiar al esquema final
 -- Cambiar al esquema final
-SET search_path TO esquema_final;
+CREATE SCHEMA IF NOT EXISTS esquema_final;
 
 -- 1. Insertar en Usuario (sin dependencias)
 INSERT INTO Usuario (nombre_usuario, contraseña, email, nombre)
